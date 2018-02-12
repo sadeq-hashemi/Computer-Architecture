@@ -25,9 +25,9 @@ initial begin
 		correctDiff = A[3:0] + ~B[3:0] + 1;		 
 		 #20
 if(sub)
-$display("%d - (%d) = %d",A[3:0], B[3:0], correctDiff);
+$display("(%d) - (%d) = %d",$signed(A[3:0]), $signed(B[3:0]),$signed( correctDiff));
 else
-$display("%d + (%d) = %d",A[3:0], B[3:0], correctSum);
+$display("(%d) + (%d) = %d",$signed(A[3:0]), $signed(B[3:0]), $signed(correctSum));
 		//if(sum !== val[3:0] - val[7:4]) $display("failed for %d + %d = %d",val[3:0], val[7:4], sum);
 		//else $display("passed");
 		
