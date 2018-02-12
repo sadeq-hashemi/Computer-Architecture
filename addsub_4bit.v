@@ -1,0 +1,35 @@
+module full_adder_1bit(A, B, Cin, S, Cout);
+
+input A, B, Cin;
+output S, Cout;
+
+assign S = A ^ B ^ Cin;
+assign Cout = (A & B) | (B & Cin) | (A & Cin);
+
+endmodule
+
+
+//----------------------------------------------------------------------------------------------------------------
+module addsub_4bit (sum, Ovfl, A, B, sub);
+input [3:0] A, B; //Input values
+input sub; // add-sub indicatoroutput
+
+wire [3:0] B2; 
+wire [3:0]cin;
+output [3:0] sum; //sum output
+output Ovfl; //To indicate overflow
+
+assign B2[0] = sub ^ B[0]; // addition: B XOR 0 = B	substraction B XOR 1 = ~B
+assign B2[1] = sub ^ B[1];
+assign B2[2] = sub ^ B[2];
+assign B2[3] = sub ^ B[3];
+assign cin[0] = sub; //1 if substraction
+
+
+ 
+full_adder_1bit FA1 (A[0], B[0], cin[0], sum[0], cin[1] ); //Example of using the one bit full adder (which you must also design)
+full_adder_1bit FA2 (A[1], B[1], cin[1], sum[1], cin[2]);
+full_adder_1bit FA3 (A[2], B[2], cin[2], sum[2], cin[3]);
+full_adder_1bit FA4 (A[3], B[3], cin[3], sum[3], Cout);
+
+endmodule
