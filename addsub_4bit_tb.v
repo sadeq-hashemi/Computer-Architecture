@@ -1,21 +1,35 @@
 
 module addsub_4bit_tb;
 
-reg [7:0] val;
+reg signed [3:0] A;
+reg signed [3:0] B;
 reg sub;
-wire [3:0] sum;
+wire signed [3:0] sum;
+reg signed [3:0] correctSum;
+reg signed [3:0] correctDiff;
 wire carry_out, ovfl;
 
 
-addsub_4bit DUT (sum[3:0], ovfl, val[3:0], val[7:4], sub);
+addsub_4bit DUT (sum[3:0], ovfl, A[3:0], A[3:0], sub);
 
 initial begin
-	val = 8'b0;
-	sub = 1'b1;
+	A = 4'b0;
+	B = 4'b0;
+	sub = 1'b0;
 	repeat(100) begin
-		#20 val = $random; #20
-		if(sum !== val[3:0] - val[7:4]) $display("failed for %d + %d = %d",val[3:0], val[7:4], sum);
-		else $display("passed");
+		#20
+		 A = $random;
+		 B = $random; 
+		 sub = $random; 
+		 correctSum = A[3:0] + B[3:0];
+		correctDiff = A[3:0] + ~B[3:0] + 1;		 
+		 #20
+if(sub)
+$display("%d - (%d) = %d",A[3:0], B[3:0], correctDiff);
+else
+$display("%d + (%d) = %d",A[3:0], B[3:0], correctSum);
+		//if(sum !== val[3:0] - val[7:4]) $display("failed for %d + %d = %d",val[3:0], val[7:4], sum);
+		//else $display("passed");
 		
 	end
 	#10;
