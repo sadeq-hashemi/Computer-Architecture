@@ -10,7 +10,7 @@ endmodule
 
 
 //----------------------------------------------------------------------------------------------------------------
-module addsub_4bit (sum, ovfl, A, B, sub);
+module addsub_4bit ( A, B, sub, sum, ovfl);
 input [3:0] A, B; //Input values
 input sub; // add-sub indicatoroutput
 
@@ -40,7 +40,7 @@ full_adder_1bit FA4 (A[3], B2[3], cin[3], sum[3], cout);
 // (if any) with the carry going out of the sign bit (if any)
 /*assign ovfl =  A[3] ^ B[3] ? 1'b0 : 
 		 A[3] & B[3] ? ~sum[3] : sum[3];*/
-assign ovfl = A[3] != B2[3]? 0: 
+assign ovfl = A[3]!= B2[3]? 0: 
 		A[3] == sum[3] ? 0 : 1;
 
 endmodule
