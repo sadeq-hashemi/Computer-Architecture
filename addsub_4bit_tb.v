@@ -11,7 +11,7 @@ wire carry_out, ovfl;
 
 
 
-addsub_4bit DUT (sum[3:0], ovfl, A[3:0], B[3:0], sub);
+addsub_4bit DUT (A[3:0], B[3:0], sub, sum[3:0], ovfl);
 
 initial begin
 	A = 4'b0;
@@ -45,8 +45,7 @@ initial begin
 					$display("failed on A + B with  A: %b (%d) B: %b (%d) SUM: %b (%d) OVFL: %b"
 					, A[3:0], A[3:0], B[3:0], B[3:0], sum[3:0], sum[3:0], ovfl);
 			end
-		//if(sum !== val[3:0] - val[7:4]) $display("failed for %d + %d = %d",val[3:0], val[7:4], sum);
-		//else $display("passed");
+
 	
 	end
 	#10;
