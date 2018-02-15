@@ -27,6 +27,7 @@ assign SLL8[15:0] = shift_val[3] ? {SLL4[15:8], 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'
 
 
 assign shift_out[15:0] = mode ?  SLL8[15:0]: SRA8[15:0]; 
+
 endmodule
 
 
