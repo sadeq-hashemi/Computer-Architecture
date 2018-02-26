@@ -6,10 +6,10 @@ module bitCell( input clk,  input rst, input D, input writeEnable, input readEna
 	wire bypass_1;
 	wire bypass_2;
 	dff FF (.q(FFout), .d(D), .wen(writeEnable), .clk(clk), .rst(rst));
-	assign bypass_1 = (readEnable1 ^~ writeEnable) ? D : FFout; 
-	assign bitline_1 = readEnable1 ? FFout : 1'bz;
-	assign bypass_2 = (readEnable2 ^~ writeEnable) ? D : FFout; 
-	assign bitline_2 = readEnable2 ? FFout : 1'bz; 
+	assign bypass_1 = (readEnable1 & writeEnable) ? D : FFout; 
+	assign bitline_1 = readEnable1 ? bypass_1 : 1'bz;
+	assign bypass_2 = (readEnable2 & writeEnable) ? D : FFout; 
+	assign bitline_2 = readEnable2 ? bypass_2 : 1'bz; 
 endmodule
 
 module register( input clk,  input rst, input [15:0] D, input writeReg, input readEnable1, input readEnable2, inout [15:0] bitline_1, inout [15:0] bitline_2);
