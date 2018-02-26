@@ -3,8 +3,12 @@ module bitCell( input clk,  input rst, input D, input writeEnable, input readEna
 	//Bit Cell consists of a D Flip Flip  that has 2 branches at its output.
 	//Each branch has its own tristate and connects to a bitline
 	wire FFout;
+	wire bypass_1;
+	wire bypass_2;
 	dff FF (.q(FFout), .d(D), .wen(writeEnable), .clk(clk), .rst(rst));
+	assign bypass_1 = (readEnable1 ^~ writeEnable) ? D : FFout; 
 	assign bitline_1 = readEnable1 ? FFout : 1'bz;
+	assign bypass_2 = (readEnable2 ^~ writeEnable) ? D : FFout; 
 	assign bitline_2 = readEnable2 ? FFout : 1'bz; 
 endmodule
 
@@ -60,7 +64,8 @@ module register( input clk,  input rst, input [15:0] D, input writeReg, input re
     
 endmodule
 
-module RegisterFile(input clk, input rst, input [3:0] srcReg_1, input [3:0] srcReg_2, input [3:0] dstReg, input writeReg, input [15:0] dstData, inout [15:0] srcData_1, inout [15:0] srcData_2);
+module RegisterFile(input clk, input rst, input [3:0] srcReg_1, input [3:0] srcReg_2, input [3:0] dstReg,
+			 input writeReg, input [15:0] dstData, inout [15:0] srcData_1, inout [15:0] srcData_2);
 	wire [15:0] oneHot_1;
 	wire [15:0] oneHot_2;
 	wire [15:0] oneHot_wr; 
