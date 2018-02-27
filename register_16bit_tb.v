@@ -1,6 +1,7 @@
 
 module register_16bit_tb;
 
+integer i;
 reg clk, rst;
 
 reg exp, err;
@@ -158,14 +159,14 @@ if(err == 0)
 	  err = 0;
 	#20 
 	rst = 1;
-	prev = 0; 
+	prevWord = 16'h0000; 
 	#20
 	rst = 0;  
 
 
 //TESTING REGISTER
 
-	repeat(200) begin
+	repeat(500) begin
 	  currIn = $random;
 	  writeEnable = $random; 
 	  readEnable1 = $random; 
@@ -185,20 +186,20 @@ if(err == 0)
 	  endcase
 	  #20
 	  case({writeEnable, readEnable1, readEnable2})
-	    READ1, WRITEREAD1: if (cellout_1 != exWord) begin
+	    READ1, WRITEREAD1: if (currOut_1 != expWord) begin
 	      err = 1;
-	      $display(" bitCell error= D:%d writeEnable:%d readEnable1: %d readEnable2: %d bitline1:%d bitline2:%d exp:%d prev: %d",
-	         cellin, writeEnable, readEnable1, readEnable2, cellout_1, cellout_2, expWord, prevWord);
+	      $display(" register error= D:%d writeEnable:%d readEnable1: %d readEnable2: %d bitline1:%d bitline2:%d exp:%d prev: %d",
+	         currIn, writeEnable, readEnable1, readEnable2, currOut_1, currOut_2, expWord, prevWord);
 	      end
-	    READ2, WRITEREAD2: if (cellout_2 != expWord)begin
+	    READ2, WRITEREAD2: if (currOut_2 != expWord)begin
 	      err = 1;
-	      $display(" bitCell error= D:%d writeEnable:%d readEnable1: %d readEnable2: %d bitline1:%d bitline2:%d exp:%d, prev:%d",
-	         cellin, writeEnable, readEnable1, readEnable2, cellout_1, cellout_2, expWord, prevWord);
+	      $display(" register error= D:%d writeEnable:%d readEnable1: %d readEnable2: %d bitline1:%d bitline2:%d exp:%d, prev:%d",
+	         currIn, writeEnable, readEnable1, readEnable2, currOut_1, currOut_2, expWord, prevWord);
 	      end
-	    WRITEREAD1READ2, READ1READ2: if(cellout_1 != exp || cellout_2 != expWord) begin
+	    WRITEREAD1READ2, READ1READ2: if(currOut_1 != expWord || currOut_2 != expWord) begin
 	      err = 1;
-	      $display(" bitCell error= D:%d writeEnable:%d readEnable1: %d readEnable2: %d bitline1:%d bitline2:%d exp:%d prev:%d",
-	         cellin, writeEnable, readEnable1, readEnable2, cellout_1, cellout_2, expWord, prevWord);
+	      $display(" register error= D:%d writeEnable:%d readEnable1: %d readEnable2: %d bitline1:%h bitline2:%h exp:%d prev:%d",
+	         currIn, writeEnable, readEnable1, readEnable2, currOut_1, currOut_2, expWord, prevWord);
 	      end
 	    //default: continue;
 	  endcase
@@ -213,7 +214,32 @@ if(err == 0)
 	prev = 0; 
 	#20
 	rst = 0;  
-
+	for(i = 0; i < 16; i = i+1) begin
+	  regArray[i] = 16'h0000;
+	end
 //TESTING REGISTER FILE
+// .clk(clk), .rst(rst), .srcReg_1(regID_1), .srcReg_2(regID_2), .dstReg(writeReg),
+	//		 .writeReg(writeEnable), .dstData(currIn), .srcData_1(currOut_1), .srcData_2(currOut_2)
+	repeat(500) begin
+	  currIn = $random;
+	  writeEnable = $random;
+	  regID_1 = $random; 
+	  regID_2 = $random;
+	  writeReg = $random;
+	  readEnable1 = $random; 
+	  readEnable2 = $random; 
+	  #20 
+
+	  regArray[writeReg] = currIn;
+	  #20
+	  if(currOut_1 != regArray[regID_1])
+	    err = 1;
+	  if(currOut_2 != regArray[regID_2])
+	    err = 1;	  
+	end
+if(err == 0)
+	  $display("register file passed... ");
+	else 
+	  err = 0;
 end
 endmodule
