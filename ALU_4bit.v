@@ -1,6 +1,7 @@
 module ALU (ALU_in1, ALU_in2, opcode, ALU_out, error );
 
-input [3:0] ALU_in1, ALU_in2;
+input [3:0] ALU_in1;
+input [3:0] ALU_in2;
 input [1:0] opcode; //ADD:00 SUB:01 NAND:10 XOR:11
 output [3:0] ALU_out;
 output error; // Just to show overflow
